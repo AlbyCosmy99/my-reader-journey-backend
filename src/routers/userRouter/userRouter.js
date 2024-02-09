@@ -16,6 +16,7 @@ userRouter.post("/register", async (req, res) => {
         await newUser.save();
 
         const payload = {
+            id: newUser._id,
             name: newUser.name,
             surname: newUser.surname,
             email: newUser.email,
@@ -50,6 +51,7 @@ userRouter.post('/login', async (req,res) => {
         }
 
         const payload = {
+            id: user._id,
             name: user.name,
             surname: user.surname,
             email: user.email,
