@@ -1,6 +1,6 @@
 import express from 'express';
 import { UserModel } from '../../database/schemas/userSchema.js';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config';
 import mailRouter from '../mailRouter/mailRouter.js'
