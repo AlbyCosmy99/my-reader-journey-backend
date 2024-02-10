@@ -1,15 +1,21 @@
-const tokenAuth = (req,res,next) => {
-    const token = req.headers.authorization.split(' ')[1]
+import jwt from 'jsonwebtoken';
 
-    
-    if(req.headers.authorization !== "password giusta e bella") {
-        const error = new Error("wrong credentials.")
-        error.status = 400
-        next(error)
-    }
-    else {
-        next()
-    }
-}
+const tokenAuth = (req, res, next) => {
+    const authHeader = req.headers.authorization;
 
-export default userAuth;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.split(' ')[1];
+
+        try {
+            const payload = jwt.verify(token, process.env.SECRET_KEY);
+            req.payload = payload;
+            next();
+        } catch (error) {
+            return res.status(401).json({ message: "invalid token" });
+        }
+    } else {
+        return res.status(401).json({ message: "missing or invalid authorization header" });
+    }
+};
+
+export default tokenAuth;
