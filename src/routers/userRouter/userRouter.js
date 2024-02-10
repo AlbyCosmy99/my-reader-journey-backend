@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config';
 import mailRouter from '../mailRouter/mailRouter.js'
+import tokenAuth from '../../middlewares/tokenAuth.js'
 
 const userRouter = express.Router();
 
@@ -16,6 +17,7 @@ userRouter.post("/register", async (req, res) => {
         await newUser.save();
 
         const payload = {
+            id: newUser._id,
             name: newUser.name,
             surname: newUser.surname,
             email: newUser.email,
@@ -50,6 +52,7 @@ userRouter.post('/login', async (req,res) => {
         }
 
         const payload = {
+            id: user._id,
             name: user.name,
             surname: user.surname,
             email: user.email,
@@ -88,5 +91,9 @@ userRouter.post('/change-password', async (req, res) => {
         });
     }
 });
+
+userRouter.get('/',tokenAuth, (req,res) => {
+    return res.status(200).json(req.payload)
+})
 
 export default userRouter;
