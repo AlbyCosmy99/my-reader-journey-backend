@@ -25,7 +25,7 @@ const bookSchema = mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        default: "https://i.pinimg.com/736x/71/4a/c8/714ac8235fdbfe556412e58ad721d513.jpg"
+        default: null,//"https://i.pinimg.com/736x/71/4a/c8/714ac8235fdbfe556412e58ad721d513.jpg"
     },
     author: String,
     borrowed: {
