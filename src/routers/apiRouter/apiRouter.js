@@ -9,7 +9,13 @@ apiRouter.use(cors())
 apiRouter.use('/users',userRouter)
 
 apiRouter.get('/', (req, res) => {
-  res.status(200).json({'message':'ok'});
+  if(req.query.name1) {
+    res.status(200).json({'name':'Daniel'});
+  }
+  else {
+    res.status(400).json({'error': 'query needed.'})
+  }
+  
 });
 
 export default apiRouter;
