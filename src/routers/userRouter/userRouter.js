@@ -5,10 +5,12 @@ import jwt from 'jsonwebtoken'
 import 'dotenv/config';
 import mailRouter from '../mailRouter/mailRouter.js'
 import tokenAuth from '../../middlewares/tokenAuth.js'
+import bookRouter from '../bookRouter/bookRouter.js';
 
 const userRouter = express.Router();
 
-userRouter.use('/mails',mailRouter)
+userRouter.use('/mails', mailRouter)
+userRouter.use('/books', bookRouter)
 
 userRouter.post("/register", async (req, res) => {
     try {
