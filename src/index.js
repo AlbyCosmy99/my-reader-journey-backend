@@ -1,4 +1,4 @@
-import express, { json } from 'express'
+import express from 'express'
 import mongoose from 'mongoose'
 import apiRouter from './routers/apiRouter/apiRouter.js'
 import cors from 'cors'
