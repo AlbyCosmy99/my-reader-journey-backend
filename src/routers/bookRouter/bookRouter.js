@@ -20,6 +20,8 @@ bookRouter.get('/', tokenAuth, async (req, res) => {
             queryConditions.toRead = true;
         } else if(filter === "favorite-books") {
             queryConditions.favorite = true;
+        } else if(filter === "top-rating-books") {
+            queryConditions.rating = 10;
         }
     }
 
@@ -37,6 +39,18 @@ bookRouter.get('/', tokenAuth, async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+bookRouter.get('/:bookId',tokenAuth, async (req,res) => {
+    let bookId = req.params.bookId
+    const userId = req.payload.id;
+    try {
+        let book = await BookModel.find({userId: userId, _id: bookId})
+        res.status(200).json({book})
+    }
+    catch(err) {
+        res.status(400).json({'error': err.message})
+    }
+})
 
 bookRouter.post('/', tokenAuth, async (req, res) => {
     const userId = req.payload.id;
