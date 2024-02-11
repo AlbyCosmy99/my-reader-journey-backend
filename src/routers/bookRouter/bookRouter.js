@@ -13,11 +13,11 @@ bookRouter.get('/', tokenAuth, async (req, res) => {
     let queryConditions = { userId: userId };
 
     if (filter) {
-        if(filter === "read") {
+        if(filter === "books-read") {
             queryConditions.read = true;
-        } else if(filter === "to-read") {
+        } else if(filter === "books-to-read") {
             queryConditions.toRead = true;
-        } else if(filter === "favorite") {
+        } else if(filter === "favorite-books") {
             queryConditions.favorite = true;
         }
     }
