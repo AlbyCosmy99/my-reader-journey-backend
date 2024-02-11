@@ -9,6 +9,7 @@ bookRouter.use(cors());
 
 bookRouter.get('/', tokenAuth, async (req, res) => {
     const filter = req.query.filter;
+    const sortBy = req.query.sortBy;
     const userId = req.payload.id;
     let queryConditions = { userId: userId };
 
@@ -23,7 +24,14 @@ bookRouter.get('/', tokenAuth, async (req, res) => {
     }
 
     try {
-        const books = await BookModel.find(queryConditions);
+        let sortOptions = {};
+        if (sortBy) {
+            const sortDirection = sortBy.startsWith('-') ? 'desc' : 'asc';
+            const sortField = sortBy.startsWith('-') ? sortBy.substring(1) : sortBy;
+            sortOptions[sortField] = sortDirection;
+        }
+
+        const books = await BookModel.find(queryConditions).sort(sortOptions);
         res.status(200).json(books);
     } catch (error) {
         res.status(500).json({ error: error.message });

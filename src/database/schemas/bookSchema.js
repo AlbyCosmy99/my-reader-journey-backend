@@ -95,7 +95,11 @@ const bookSchema = mongoose.Schema({
     notes: {
         type: String,
         default: null
-    },  
+    },
+    dateAdded: {
+        type: Date,
+        default: Date.now()
+    }
 })
 
 export const BookModel = mongoose.model('books', bookSchema)
