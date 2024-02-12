@@ -77,8 +77,8 @@ const bookSchema = mongoose.Schema({
     rating: {
         type: Number,
         min: 1,
-        max: 5,
-        default: 5
+        max: 10,
+        default: 6
     },
     category: {
         type: String,

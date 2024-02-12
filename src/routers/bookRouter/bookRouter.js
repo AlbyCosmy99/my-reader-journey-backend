@@ -11,6 +11,7 @@ bookRouter.get('/', tokenAuth, async (req, res) => {
     const filter = req.query.filter;
     const sortBy = req.query.sortBy;
     const userId = req.payload.id;
+    const take = req.query.take ? parseInt(req.query.take, 10) : null;
     let queryConditions = { userId: userId };
 
     if (filter) {
@@ -31,13 +32,19 @@ bookRouter.get('/', tokenAuth, async (req, res) => {
             sortOptions[sortField] = sortDirection;
         }
 
-        const books = await BookModel.find(queryConditions).sort(sortOptions);
+        let query = BookModel.find(queryConditions).sort(sortOptions);
+
+        if (take && take > 0) {
+            query = query.limit(take);
+        }
+
+        const books = await query; // Execute the query
+
         res.status(200).json(books);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
-
 bookRouter.post('/', tokenAuth, async (req, res) => {
     const userId = req.payload.id;
     try {
