@@ -42,13 +42,7 @@ const bookSchema = mongoose.Schema({
     },
     endReadingDate: {
         type: Date,
-        default: Date.now(),
-        validate: {
-            validator: function(endDate) {
-              return !endDate || !this.startReadingDate || endDate > this.startReadingDate;
-            },
-            message: 'endReadingDate must be after startReadingDate.'
-          }
+        default: Date.now()
     },
     publicationDate: {
         type: Date,
