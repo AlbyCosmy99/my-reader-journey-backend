@@ -90,7 +90,7 @@ const bookSchema = mongoose.Schema({
     },
     description: {
         type: String,
-        default: "English"
+        default: null
     },
     notes: {
         type: String,
