@@ -75,4 +75,19 @@ bookRouter.post('/', tokenAuth, async (req, res) => {
     }
 });
 
+bookRouter.delete('/:bookId',tokenAuth, async (req,res) => {
+    const userId = req.payload.id;
+    const bookId = req.params.bookId;
+
+    try {
+        await BookModel.deleteOne({userId: userId, _id: bookId});
+        return res.status(204).end();
+      } catch (error) {
+        return res.status(400).json({
+            "error": "Cannot save to db.",
+            "details": error.message
+        })
+    }
+})
+
 export default bookRouter;
