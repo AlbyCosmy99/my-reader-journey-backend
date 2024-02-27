@@ -27,7 +27,9 @@ const bookSchema = mongoose.Schema({
         type: String,
         default: "https://static.vecteezy.com/system/resources/thumbnails/002/870/495/small_2x/blank-book-cover-over-gray-background-vector.jpg"
     },
-    author: String,
+    author: {
+        type: String
+    },
     borrowed: {
         type: Boolean,
         default: false
