@@ -74,7 +74,7 @@ const bookSchema = mongoose.Schema({
         type: Number,
         min: 1,
         max: 10,
-        default: 6
+        default: null
     },
     category: {
         type: String,
