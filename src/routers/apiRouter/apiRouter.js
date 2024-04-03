@@ -9,7 +9,7 @@ apiRouter.use(cors())
 apiRouter.use('/users',userRouter)
 
 apiRouter.get('/', (req, res) => {
-  if(req.query.name1) {
+  if(req.query.name) {
     res.status(200).json({'name':'Daniel'});
   }
   else {
