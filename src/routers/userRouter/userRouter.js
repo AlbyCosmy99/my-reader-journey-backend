@@ -98,4 +98,8 @@ userRouter.get('/',tokenAuth, (req,res) => {
     return res.status(200).json(req.payload)
 })
 
+userRouter.get('/', (req,res) => {
+    return res.status(200).json("users ok")
+})
+
 export default userRouter;
