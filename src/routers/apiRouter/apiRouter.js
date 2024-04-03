@@ -10,7 +10,7 @@ apiRouter.use('/users',userRouter)
 
 apiRouter.get('/', (req, res) => {
   if(req.query.name) {
-    res.status(200).json({'name':'Daniel'});
+    res.status(200).json({'name':req.query.name});
   }
   else {
     res.status(400).json({'error': 'query needed.'})
