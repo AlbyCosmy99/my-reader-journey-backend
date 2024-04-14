@@ -20,7 +20,8 @@ server.use(cors())
 server.get('/', (req,res) => {
     const words = ['spray', 'elite', 'exuberant', 'destruction', 'present','Daniel', 'Andrei'];
     res.json({
-        elements: words
+        elements: words,
+        ciao: 'cose belle'
     })
 })
 
