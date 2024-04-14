@@ -20,8 +20,13 @@ server.use(cors())
 server.get('/ciaodaniel', (req,res) => {
     const words = ['spray', 'elite', 'exuberant', 'destruction', 'present','Daniel', 'Andrei'];
     res.json({
-        elements: words,
-        ciao: 'cose belle'
+        elements: words
+    })
+})
+server.get('/ciaodaniel/:index', (req,res) => {
+    const words = ['spray', 'elite', 'exuberant', 'destruction', 'present','Daniel', 'Andrei'];
+    res.json({
+        element: words[req.params.index]
     })
 })
 
