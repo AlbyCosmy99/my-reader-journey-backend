@@ -15,14 +15,14 @@ const port = process.env.PORT || 3030
 server.use(express.json())
 server.use('/api', apiRouter)
 
+server.use(cors())
+
 server.get('/', (req,res) => {
     const words = ['spray', 'elite', 'exuberant', 'destruction', 'present','Daniel', 'Andrei'];
     res.json({
         elements: words
     })
 })
-
-server.use(cors())
 
 mongoose.connect(mongoUri)
 .then(() => {
