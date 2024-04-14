@@ -17,7 +17,7 @@ server.use('/api', apiRouter)
 
 server.use(cors())
 
-server.get('/', (req,res) => {
+server.get('/ciaodaniel', (req,res) => {
     const words = ['spray', 'elite', 'exuberant', 'destruction', 'present','Daniel', 'Andrei'];
     res.json({
         elements: words,
