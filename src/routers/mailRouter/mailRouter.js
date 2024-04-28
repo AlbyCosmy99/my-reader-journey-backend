@@ -12,9 +12,9 @@ const transporter = nodemailer.createTransport({
     secure: false, // True for 465, false for other ports
     auth: {
       user: 'dinamo1999@icloud.com', // Your iCloud email
-      pass: 'tegt-zcos-peqt-ccxq', // App-specific password generated from Apple ID account page
+      pass: 'ioxj-kmlt-flem-wqel', // App-specific password generated from Apple ID account page
     },
-  });
+});
 
 mailRouter.post('/send-verification', async (req, res) => {
   const { email } = req.body;
