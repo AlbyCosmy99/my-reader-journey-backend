@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
     secure: false, // True for 465, false for other ports
     auth: {
       user: 'dinamo1999@icloud.com', // Your iCloud email
-      pass: 'ioxj-kmlt-flem-wqel', // App-specific password generated from Apple ID account page
+      pass: 'kgrc-sryi-dbzy-hgul', // App-specific password generated from Apple ID account page
     },
 });
 
