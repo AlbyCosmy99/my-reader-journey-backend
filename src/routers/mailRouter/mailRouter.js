@@ -20,7 +20,7 @@ mailRouter.post('/send-verification', async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: 'newsletter.ticdrive@gmail.com',
       to: email,
       subject: 'Benvenuto!',
       text: 'TicDrive',
