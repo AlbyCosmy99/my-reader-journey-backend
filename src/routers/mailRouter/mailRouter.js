@@ -20,10 +20,15 @@ mailRouter.post('/send-verification', async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: 'newsletter.ticdrive@gmail.com',
+      from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Your Verification Code',
-      text: `Your verification code is: ${verificationCode}`,
+      subject: 'Benvenuto!',
+      text: 'TicDrive',
+      html: `
+        <div style="padding: 2rem; text-align: center;">
+          <h1>Benvenuto nel mondo di <span style="color: #737373;">Tic</span><span style="color: #00BF63;">drive</span>!</h1>
+          <p>Codice sconto: <b>TICDRIVE25</b></p>
+        </div>`,
     });
 
     res.send({ code: verificationCode });
