@@ -14,7 +14,7 @@ userRouter.use('/books', bookRouter)
 
 userRouter.post("/register", async (req, res) => {
     try {
-        const existingUser = await UserModel.findOne({ email });
+        const existingUser = await UserModel.findOne({ email: req.body.email });
         if (existingUser) {
             return res.status(400).json({
                 error: "User already exists with this email"
