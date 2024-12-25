@@ -17,19 +17,6 @@ server.use('/api', apiRouter)
 
 server.use(cors())
 
-server.get('/ciaodaniel', (req,res) => {
-    const words = ['spray', 'elite', 'exuberant', 'destruction', 'present','Daniel', 'Andrei'];
-    res.json({
-        elements: words
-    })
-})
-server.get('/ciaodaniel/:index', (req,res) => {
-    const words = ['spray', 'elite', 'exuberant', 'destruction', 'present','Daniel', 'Andrei'];
-    res.json({
-        element: words[req.params.index]
-    })
-})
-
 mongoose.connect(mongoUri)
 .then(() => {
     server.listen(port, () => {
