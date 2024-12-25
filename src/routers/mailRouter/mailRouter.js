@@ -7,13 +7,11 @@ const mailRouter = express.Router();
 mailRouter.use(cors())
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.mail.me.com', // iCloud SMTP server
-    port: 587, // Standard SMTP port
-    secure: false, // True for 465, false for other ports
-    auth: {
-      user: 'dinamo1999@icloud.com', // Your iCloud email
-      pass: 'ioxj-kmlt-flem-wqel', // App-specific password generated from Apple ID account page
-    },
+  service: 'gmail',
+  auth: {
+    user: 'newsletter.ticdrive@gmail.com',
+    pass: 'zlfz fkxz lihh zcsf',
+  },
 });
 
 mailRouter.post('/send-verification', async (req, res) => {
@@ -22,10 +20,15 @@ mailRouter.post('/send-verification', async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: 'dinamo1999@icloud.com',
+      from: 'newsletter.ticdrive@gmail.com',
       to: email,
-      subject: 'Your Verification Code',
-      text: `Your verification code is: ${verificationCode}`,
+      subject: 'Benvenuto!',
+      text: 'TicDrive',
+      html: `
+        <div style="padding: 2rem; text-align: center;">
+          <h1>Benvenuto nel mondo di <span style="color: #737373;">Tic</span><span style="color: #00BF63;">drive</span>!</h1>
+          <p>Codice sconto: <b>TICDRIVE25</b></p>
+        </div>`,
     });
 
     res.send({ code: verificationCode });
