@@ -14,6 +14,12 @@ userRouter.use('/books', bookRouter)
 
 userRouter.post("/register", async (req, res) => {
     try {
+        const existingUser = await UserModel.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({
+                error: "User already exists with this email"
+            });
+        }
         const newUser = new UserModel(req.body);
         newUser.password = await bcrypt.hash(newUser.password, 10)
         await newUser.save();
