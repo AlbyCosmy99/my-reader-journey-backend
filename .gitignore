@@ -1,2 +1,68 @@
-# Local Netlify folder
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Output
+dist/
+build/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Testing
+coverage/
+nyc_output/
+jest-test-results.json
+
+# Logs
+logs/
+*.log
+*.csv
+debug.log
+
+# PM2 logs
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Local Netlify
 .netlify
+.netlify/*
+
+# Optional: if using TypeScript
+*.tsbuildinfo
+
+# Optional: if using Docker
+docker-compose.override.yml
+.docker/
+
+# Optional: if using Prisma or Sequelize
+prisma/migrations/
+prisma/.env
+
+# Optional: if using Redis, Postgres, etc.
+dump.rdb
+*.sqlite
+*.sqlite3
+
+# Misc
+*.tgz
+*.bak
