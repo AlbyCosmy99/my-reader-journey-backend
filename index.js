@@ -6,7 +6,7 @@ import cors from 'cors'
 const username = encodeURIComponent("AlbyCosmy99");
 const password = encodeURIComponent("onJ20KTO7cfg6GzO");
 
-const mongoUri = `mongodb+srv://${username}:${password}@cluster0.6fepqnw.mongodb.net/myDatabase?retryWrites=true&w=majority&ssl=true`
+const mongoUri = `mongodb+srv://${username}:${password}@cluster0.6fepqnw.mongodb.net/myReaderJourney?retryWrites=true&w=majority&ssl=true`
 
 const server = express()
 
