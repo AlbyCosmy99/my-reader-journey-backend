@@ -25,7 +25,7 @@ mailRouter.post("/send-verification", async (req, res) => {
       from: senderEmail,
       to: email,
       subject: "Your Verification Code",
-      text: `Welcome to My Reader Journey!\n\nYour verification code is: ${verificationCode}\n\nHappy reading!`,
+      text: `My Reader Journey\n\nYour verification code is: ${verificationCode}\n\nHappy reading!`,
       html: `
         <div style="padding: 2rem; text-align: center; font-family: Arial, sans-serif;">
           <h1 style="color: #333;">Welcome to My Reader Journey!</h1>
