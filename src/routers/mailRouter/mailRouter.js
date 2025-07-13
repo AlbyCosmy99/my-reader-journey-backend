@@ -44,7 +44,7 @@ mailRouter.post("/send-verification", async (req, res) => {
       `,
     });
 
-    res.send({ success: "Code sent to " + email + " email" });
+    res.send({ code: verificationCode });
   } catch (error) {
     console.error("Error sending email:", error);
     res.status(500).send({ error: "Failed to send verification email." });
