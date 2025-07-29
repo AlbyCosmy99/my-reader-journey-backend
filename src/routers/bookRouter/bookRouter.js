@@ -42,9 +42,9 @@ bookRouter.get("/", tokenAuth, async (req, res) => {
 
     const books = await query;
 
-    res.status(200).json({ books, sortedBy: sortOptions });
+    return res.status(200).json({ books, sortedBy: sortOptions });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 });
 
@@ -53,9 +53,9 @@ bookRouter.get("/:bookId", tokenAuth, async (req, res) => {
   const userId = req.payload.id;
   try {
     let book = await BookModel.find({ userId: userId, _id: bookId });
-    res.status(200).json({ book });
+    return res.status(200).json({ book });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message });
   }
 });
 
@@ -65,9 +65,9 @@ bookRouter.post("/", tokenAuth, async (req, res) => {
     const newBook = new BookModel(req.body);
     newBook.userId = userId;
     await newBook.save();
-    res.status(201).json(newBook);
+    return res.status(201).json(newBook);
   } catch (error) {
-    res.status(400).json({
+    return res.status(400).json({
       error: "Cannot save to db.",
       details: error.message,
     });
@@ -83,14 +83,14 @@ bookRouter.put("/:bookId/favorite", tokenAuth, async (req, res) => {
     if (book) {
       book.favorite = !book.favorite;
       await book.save();
-      res.status(200).json(book);
+      return res.status(200).json(book);
     } else {
-      res.status(404).json({
+      return res.status(404).json({
         error: "Cannot find book.",
       });
     }
   } catch (error) {
-    res.status(400).json({
+    return res.status(400).json({
       error: "Cannot save to db.",
       details: error.message,
     });
