@@ -16,7 +16,8 @@ It was developed in **February 2024** as the **final capstone project** of the *
   - 📖 Mark books as read / to read  
   - ❤️ Favorite books  
   - 🌟 Assign ratings  
-  - 🗑️ Delete books  
+  - 🗑️ Delete books
+  - 🔍 Filter and search books
 - Data stored in **MongoDB** (cloud)
 
 ---
