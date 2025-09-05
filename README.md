@@ -19,7 +19,7 @@ It was developed in **February 2024** as the **final capstone project** of the *
   - 🗑️ Delete books
   - 🔍 Filter and search books
 - **Authentication with JWT** for protected routes (login required for managing books)  
-  - Data stored in **MongoDB** (cloud)
+- Data stored in **MongoDB** (cloud)
 
 ---
 
