@@ -37,7 +37,7 @@ It was developed in **February 2024** as the **final capstone project** of the *
 
 - `GET /books` → Fetch all books  
 - `POST /books` → Add a new book  
-- `PUT /books/:id` → Update book (mark as read, favorite, etc.)  
+- `PUT /books/:id` → Update book
 - `DELETE /books/:id` → Remove a book  
 
 
