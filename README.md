@@ -43,4 +43,7 @@ It was developed in **February 2024** as the **final capstone project** of the *
 - `DELETE /books/:id` → Remove a book  
 
 
+---
+
+
 👉 This backend, together with the frontend, forms the complete **My Reader Journey** application: a personal reading tracker built as the final full-stack Epicode scapstone project.
