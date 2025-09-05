@@ -18,7 +18,8 @@ It was developed in **February 2024** as the **final capstone project** of the *
   - 🌟 Assign ratings  
   - 🗑️ Delete books
   - 🔍 Filter and search books
-- Data stored in **MongoDB** (cloud)
+- **Authentication with JWT** for protected routes (login required for managing books)  
+  - Data stored in **MongoDB** (cloud)
 
 ---
 
@@ -27,13 +28,14 @@ It was developed in **February 2024** as the **final capstone project** of the *
 - **Node.js** (runtime)  
 - **Express.js** (web library)  
 - **MongoDB + Mongoose** (database & ODM)  
-- **dotenv** (environment variable management)  
+- **dotenv** (environment variable management)
+- **JWT (JSON Web Tokens)** (authentication & authorization)  
 - **Cors / body-parser / nodemon** (middleware & dev tools)  
 
 ---
 
 
-## 📖 Example API endpoints
+## 📖 Example API endpoints - authentication with jwt required
 
 - `GET /books` → Fetch all books  
 - `POST /books` → Add a new book  
