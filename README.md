@@ -1,6 +1,6 @@
 # 📚 My Reader Journey (Backend)
 
-This is the **backend API** for **My Reader Journey**, a web application that helps readers track and organize their books.  
+This is the **backend** for **My Reader Journey**, a web application that helps readers track and organize their books.  
 It was developed in **February 2024** as the **final capstone project** of the *Epicode Full-Stack Developer* course.  
 
 👉 Frontend repo: https://github.com/AlbyCosmy99/my-reader-journey-frontend <br>
