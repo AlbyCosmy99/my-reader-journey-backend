@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express'
 import mongoose from 'mongoose'
 import apiRouter from './src/routers/apiRouter/apiRouter.js'
@@ -12,10 +13,9 @@ const server = express()
 
 const port = process.env.PORT || 3030
 
+server.use(cors())
 server.use(express.json())
 server.use('/api', apiRouter)
-
-server.use(cors())
 
 mongoose.connect(mongoUri)
 .then(() => {
@@ -27,4 +27,3 @@ mongoose.connect(mongoUri)
     console.error("Failed to connect to MongoDB", err);
     process.exit(1);
 });
-

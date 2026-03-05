@@ -1,8 +1,10 @@
 import express from "express";
 import nodemailer from "nodemailer";
 import cors from "cors";
+import "dotenv/config";
 
-const senderEmail = "albu.cosminandrei.1999@gmail.com";
+const senderEmail = process.env.MAIL_USER;
+const senderPassword = process.env.MAIL_PASS;
 
 const mailRouter = express.Router();
 
@@ -12,13 +14,27 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: senderEmail,
-    pass: "czlf lhpa lsxw fzfd",
+    pass: senderPassword,
   },
 });
+
+if (!senderEmail || !senderPassword) {
+  console.warn(
+    "MAIL_USER/MAIL_PASS missing: /send-verification will return 500 until configured."
+  );
+}
 
 mailRouter.post("/send-verification", async (req, res) => {
   const { email } = req.body;
   const verificationCode = Math.floor(100000 + Math.random() * 900000); // 6-digit code
+
+  if (!email || typeof email !== "string") {
+    return res.status(400).send({ error: "Valid email is required." });
+  }
+
+  if (!senderEmail || !senderPassword) {
+    return res.status(500).send({ error: "Mail service is not configured." });
+  }
 
   try {
     await transporter.sendMail({
