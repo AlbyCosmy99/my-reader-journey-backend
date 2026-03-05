@@ -9,18 +9,44 @@ import bookRouter from '../bookRouter/bookRouter.js';
 
 const userRouter = express.Router();
 
+const normalizeEmail = (email = '') => String(email).trim().toLowerCase();
+
+const escapeRegex = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const findUserByEmailInsensitive = async email => {
+    const normalizedEmail = normalizeEmail(email);
+    if (!normalizedEmail) return null;
+
+    return UserModel.findOne({
+        email: {
+            $regex: `^${escapeRegex(normalizedEmail)}$`,
+            $options: 'i'
+        }
+    });
+};
+
 userRouter.use('/mails', mailRouter)
 userRouter.use('/books', bookRouter)
 
 userRouter.post("/register", async (req, res) => {
     try {
-        const existingUser = await UserModel.findOne({ email: req.body.email });
+        const normalizedEmail = normalizeEmail(req.body.email);
+        if (!normalizedEmail) {
+            return res.status(400).json({
+                error: "Valid email is required"
+            });
+        }
+
+        const existingUser = await findUserByEmailInsensitive(normalizedEmail);
         if (existingUser) {
             return res.status(400).json({
                 error: "User already exists with this email"
             });
         }
-        const newUser = new UserModel(req.body);
+        const newUser = new UserModel({
+            ...req.body,
+            email: normalizedEmail
+        });
         newUser.password = await bcrypt.hash(newUser.password, 10)
         await newUser.save();
 
@@ -47,7 +73,7 @@ userRouter.post("/register", async (req, res) => {
 userRouter.post('/login', async (req,res) => {
     try {
         const { email, password } = req.body;
-        const user = await UserModel.findOne({email: email })
+        const user = await findUserByEmailInsensitive(email);
 
         if(!user) {
             return res.status(404).json({ message: "User not found" });
@@ -82,7 +108,7 @@ userRouter.post('/login', async (req,res) => {
 userRouter.post('/change-password', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await UserModel.findOne({ email: email });
+        const user = await findUserByEmailInsensitive(email);
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
