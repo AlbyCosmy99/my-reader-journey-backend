@@ -74,6 +74,62 @@ bookRouter.post("/", tokenAuth, async (req, res) => {
   }
 });
 
+bookRouter.put("/:bookId", tokenAuth, async (req, res) => {
+  const userId = req.payload.id;
+  const bookId = req.params.bookId;
+  const updatedFields = { ...req.body };
+  const nullableDateFields = [
+    "publicationDate",
+    "startReadingDate",
+    "endReadingDate",
+    "dateAdded",
+  ];
+
+  for (const field of nullableDateFields) {
+    if (updatedFields[field] === "") {
+      updatedFields[field] = null;
+    }
+  }
+
+  if (updatedFields.pages === "") {
+    updatedFields.pages = null;
+  }
+
+  if (updatedFields.rating === "") {
+    updatedFields.rating = null;
+  }
+
+  delete updatedFields.userId;
+  delete updatedFields._id;
+
+  if (typeof updatedFields.title === "string") {
+    updatedFields.title = updatedFields.title.trim();
+  }
+
+  if (!updatedFields.title) {
+    return res.status(400).json({ error: "Title is required." });
+  }
+
+  try {
+    const updatedBook = await BookModel.findOneAndUpdate(
+      { userId: userId, _id: bookId },
+      updatedFields,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedBook) {
+      return res.status(404).json({ error: "Cannot find book." });
+    }
+
+    return res.status(200).json(updatedBook);
+  } catch (error) {
+    return res.status(400).json({
+      error: "Cannot save to db.",
+      details: error.message,
+    });
+  }
+});
+
 bookRouter.put("/:bookId/favorite", tokenAuth, async (req, res) => {
   const userId = req.payload.id;
   const bookId = req.params.bookId;
