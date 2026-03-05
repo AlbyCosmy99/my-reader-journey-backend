@@ -2,6 +2,7 @@ import express from "express";
 import nodemailer from "nodemailer";
 import cors from "cors";
 import "dotenv/config";
+import { UserModel } from "../../database/schemas/userSchema.js";
 
 const senderEmail = process.env.MAIL_USER || process.env.MAIL;
 const senderPassword =
@@ -10,6 +11,7 @@ const senderPassword =
   process.env.MAIL_APP_PASSWORD;
 
 const mailRouter = express.Router();
+const normalizeEmail = (email = "") => String(email).trim().toLowerCase();
 
 mailRouter.use(cors());
 
@@ -34,24 +36,29 @@ if (!senderEmail || !senderPassword) {
 }
 
 mailRouter.post("/send-verification", async (req, res) => {
-  const { email } = req.body;
+  const normalizedEmail = normalizeEmail(req.body?.email);
   const verificationCode = Math.floor(100000 + Math.random() * 900000); // 6-digit code
 
-  if (!email || typeof email !== "string") {
+  if (!normalizedEmail) {
     return res.status(400).send({ error: "Valid email is required." });
   }
 
-  if (!senderEmail || !senderPassword) {
-    return res.status(500).send({
-      error:
-        "Mail service is not configured. Set MAIL_USER + MAIL_PASS (or MAIL + MAIL_PASS).",
-    });
-  }
-
   try {
+    const existingUser = await UserModel.findOne({ email: normalizedEmail }).select("_id");
+    if (!existingUser) {
+      return res.status(404).send({ error: "User not found." });
+    }
+
+    if (!senderEmail || !senderPassword) {
+      return res.status(500).send({
+        error:
+          "Mail service is not configured. Set MAIL_USER + MAIL_PASS (or MAIL + MAIL_PASS).",
+      });
+    }
+
     await transporter.sendMail({
       from: senderEmail,
-      to: email,
+      to: normalizedEmail,
       subject: "Your Verification Code",
       text: `My Reader Journey\n\nYour verification code is: ${verificationCode}\n\nHappy reading!`,
       html: `
