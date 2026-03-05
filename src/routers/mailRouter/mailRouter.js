@@ -60,6 +60,14 @@ if (!senderEmail || !senderPassword) {
   );
 }
 
+if (senderEmail && senderPassword) {
+  void transporter.verify().then(() => {
+    console.log(`Mail transporter ready for ${senderEmail}`);
+  }).catch((error) => {
+    console.error("Mail transporter verification failed:", error);
+  });
+}
+
 mailRouter.post("/send-verification", async (req, res) => {
   const normalizedEmail = normalizeEmail(req.body?.email);
   const verificationCode = Math.floor(100000 + Math.random() * 900000); // 6-digit code
@@ -81,13 +89,16 @@ mailRouter.post("/send-verification", async (req, res) => {
       verificationCode
     );
 
-    // Return the verification code immediately; the SMTP round-trip can take
-    // several seconds in production and does not need to block the UI.
-    res.send({ code: verificationCode });
-
-    void transporter.sendMail(mailOptions).catch((error) => {
-      console.error("Error sending email:", error);
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Verification email sent:", {
+      to: normalizedEmail,
+      accepted: info.accepted,
+      rejected: info.rejected,
+      response: info.response,
+      messageId: info.messageId,
     });
+
+    res.send({ code: verificationCode });
   } catch (error) {
     console.error("Error sending email:", error);
     const details = error?.message || "Unknown error";
