@@ -3,8 +3,11 @@ import nodemailer from "nodemailer";
 import cors from "cors";
 import "dotenv/config";
 
-const senderEmail = process.env.MAIL_USER;
-const senderPassword = process.env.MAIL_PASS;
+const senderEmail = process.env.MAIL_USER || process.env.MAIL;
+const senderPassword =
+  process.env.MAIL_PASS ||
+  process.env.MAIL_PASSWORD ||
+  process.env.MAIL_APP_PASSWORD;
 
 const mailRouter = express.Router();
 
@@ -19,8 +22,14 @@ const transporter = nodemailer.createTransport({
 });
 
 if (!senderEmail || !senderPassword) {
+  const missing = [];
+  if (!senderEmail) missing.push("MAIL_USER (or MAIL)");
+  if (!senderPassword)
+    missing.push("MAIL_PASS (or MAIL_PASSWORD / MAIL_APP_PASSWORD)");
   console.warn(
-    "MAIL_USER/MAIL_PASS missing: /send-verification will return 500 until configured."
+    `Mail env missing: ${missing.join(
+      ", "
+    )}. /send-verification will return 500 until configured.`
   );
 }
 
@@ -33,7 +42,10 @@ mailRouter.post("/send-verification", async (req, res) => {
   }
 
   if (!senderEmail || !senderPassword) {
-    return res.status(500).send({ error: "Mail service is not configured." });
+    return res.status(500).send({
+      error:
+        "Mail service is not configured. Set MAIL_USER + MAIL_PASS (or MAIL + MAIL_PASS).",
+    });
   }
 
   try {
@@ -63,7 +75,14 @@ mailRouter.post("/send-verification", async (req, res) => {
     res.send({ code: verificationCode });
   } catch (error) {
     console.error("Error sending email:", error);
-    res.status(500).send({ error: "Failed to send verification email." });
+    const details = error?.message || "Unknown error";
+    if (process.env.NODE_ENV === "production") {
+      return res.status(500).send({ error: "Failed to send verification email." });
+    }
+    return res.status(500).send({
+      error: "Failed to send verification email.",
+      details,
+    });
   }
 });
 
