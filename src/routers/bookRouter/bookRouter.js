@@ -7,6 +7,43 @@ const bookRouter = express.Router();
 
 bookRouter.use(cors());
 
+const normalizeBookFields = fields => {
+  const normalized = { ...fields };
+  const nullableDateFields = [
+    "publicationDate",
+    "startReadingDate",
+    "endReadingDate",
+    "dateAdded",
+  ];
+
+  for (const field of nullableDateFields) {
+    if (normalized[field] === "") {
+      normalized[field] = null;
+    }
+  }
+
+  if (normalized.pages === "") {
+    normalized.pages = null;
+  }
+
+  if (normalized.rating === "") {
+    normalized.rating = null;
+  }
+
+  if (normalized.publicationYear === "") {
+    normalized.publicationYear = null;
+  } else if (normalized.publicationYear !== undefined && normalized.publicationYear !== null) {
+    const yearValue = Number(normalized.publicationYear);
+    normalized.publicationYear = Number.isFinite(yearValue) ? yearValue : null;
+  }
+
+  if (normalized.currency !== "EUR" && normalized.currency !== "USD") {
+    normalized.currency = "EUR";
+  }
+
+  return normalized;
+};
+
 bookRouter.get("/", tokenAuth, async (req, res) => {
   const filter = req.query.filter;
   const sortBy = req.query.sortBy;
@@ -62,7 +99,7 @@ bookRouter.get("/:bookId", tokenAuth, async (req, res) => {
 bookRouter.post("/", tokenAuth, async (req, res) => {
   const userId = req.payload.id;
   try {
-    const newBook = new BookModel(req.body);
+    const newBook = new BookModel(normalizeBookFields(req.body));
     newBook.userId = userId;
     await newBook.save();
     return res.status(201).json(newBook);
@@ -77,27 +114,7 @@ bookRouter.post("/", tokenAuth, async (req, res) => {
 bookRouter.put("/:bookId", tokenAuth, async (req, res) => {
   const userId = req.payload.id;
   const bookId = req.params.bookId;
-  const updatedFields = { ...req.body };
-  const nullableDateFields = [
-    "publicationDate",
-    "startReadingDate",
-    "endReadingDate",
-    "dateAdded",
-  ];
-
-  for (const field of nullableDateFields) {
-    if (updatedFields[field] === "") {
-      updatedFields[field] = null;
-    }
-  }
-
-  if (updatedFields.pages === "") {
-    updatedFields.pages = null;
-  }
-
-  if (updatedFields.rating === "") {
-    updatedFields.rating = null;
-  }
+  const updatedFields = normalizeBookFields(req.body);
 
   delete updatedFields.userId;
   delete updatedFields._id;

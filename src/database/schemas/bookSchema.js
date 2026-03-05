@@ -50,6 +50,10 @@ const bookSchema = mongoose.Schema({
         type: Date,
         default: null
     },
+    publicationYear: {
+        type: Number,
+        default: null
+    },
     isbn: {
         type: String,
         default: null
@@ -69,6 +73,11 @@ const bookSchema = mongoose.Schema({
     price: {
         type: String,
         default: null
+    },
+    currency: {
+        type: String,
+        enum: ['EUR', 'USD'],
+        default: 'EUR'
     },
     rating: {
         type: Number,
