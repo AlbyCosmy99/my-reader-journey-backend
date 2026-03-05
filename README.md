@@ -34,6 +34,21 @@ It was developed in **February 2024** as the **final capstone project** of the *
 
 ---
 
+## Password reset email on Railway
+
+The `/api/users/password-reset/request` endpoint sends a verification code by email.
+
+- If you deploy on **Railway** and use **SMTP** (for example Gmail on port `465`), the connection can time out on **Free / Trial / Hobby** plans because outbound SMTP may be blocked.
+- In that setup the backend currently answers with `502 Unable to send reset email right now. Please try again later.`
+- The supported workaround in this project is to use **Resend over HTTPS**:
+  - set `MAIL_PROVIDER=resend`
+  - set `RESEND_API_KEY=...`
+  - set `MAIL_FROM=My Reader Journey <onboarding@resend.dev>` for testing, or your verified domain for production
+
+See `.env.example` for the exact variable names.
+
+---
+
 
 ## 📖 Example API endpoints - authentication with jwt required
 

@@ -21,6 +21,22 @@ const smtpHost = normalizeEnvValue(process.env.SMTP_HOST) || "smtp.gmail.com";
 const smtpPort = Number(process.env.SMTP_PORT || 465);
 const smtpSecure = String(process.env.SMTP_SECURE || "true").toLowerCase() === "true";
 const mailTimeoutMs = Number(process.env.MAIL_TIMEOUT_MS || 10000);
+const isRailwayRuntime = Boolean(
+  process.env.RAILWAY_PROJECT_ID ||
+    process.env.RAILWAY_SERVICE_ID ||
+    process.env.RAILWAY_ENVIRONMENT_ID
+);
+
+const getRailwaySmtpHint = () => {
+  if (!isRailwayRuntime || mailProvider !== "smtp") {
+    return "";
+  }
+
+  return (
+    " Railway can block outbound SMTP on Free, Trial, and Hobby plans. " +
+    "Use MAIL_PROVIDER=resend with RESEND_API_KEY + MAIL_FROM, or upgrade the Railway service to Pro."
+  );
+};
 
 const transporter =
   mailProvider === "smtp"
@@ -81,10 +97,16 @@ export const verifyMailTransport = async () => {
     return;
   }
 
+  if (isRailwayRuntime) {
+    console.warn(
+      `Mail provider configured as smtp on Railway.${getRailwaySmtpHint()}`
+    );
+  }
+
   await withTimeout(
     () => transporter.verify(),
     mailTimeoutMs,
-    `SMTP verification timed out after ${mailTimeoutMs}ms`
+    `SMTP verification timed out after ${mailTimeoutMs}ms.${getRailwaySmtpHint()}`
   );
   console.log(`Mail provider ready: smtp (${senderEmail})`);
 };
@@ -144,7 +166,7 @@ const sendViaSmtp = async ({to, subject, text, html}) =>
         html,
       }),
     mailTimeoutMs,
-    `SMTP send timed out after ${mailTimeoutMs}ms`
+    `SMTP send timed out after ${mailTimeoutMs}ms.${getRailwaySmtpHint()}`
   );
 
 export const sendMail = async ({to, subject, text, html}) => {
