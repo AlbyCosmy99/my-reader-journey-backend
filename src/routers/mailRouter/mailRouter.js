@@ -3,11 +3,18 @@ import nodemailer from "nodemailer";
 import cors from "cors";
 import "dotenv/config";
 
-const senderEmail = process.env.MAIL_USER || process.env.MAIL;
-const senderPassword =
+const normalizeEnvValue = (value = "") =>
+  String(value).trim().replace(/^['"]|['"]$/g, "");
+const normalizeMailPassword = (value = "") =>
+  normalizeEnvValue(value).replace(/\s+/g, "");
+
+const rawSenderEmail = process.env.MAIL_USER || process.env.MAIL;
+const rawSenderPassword =
   process.env.MAIL_PASS ||
   process.env.MAIL_PASSWORD ||
   process.env.MAIL_APP_PASSWORD;
+const senderEmail = normalizeEnvValue(rawSenderEmail);
+const senderPassword = normalizeMailPassword(rawSenderPassword);
 
 const mailRouter = express.Router();
 const normalizeEmail = (email = "") => String(email).trim().toLowerCase();
@@ -58,6 +65,13 @@ if (!senderEmail || !senderPassword) {
       ", "
     )}. /send-verification will return 500 until configured.`
   );
+}
+
+if (
+  rawSenderPassword &&
+  normalizeEnvValue(rawSenderPassword) !== senderPassword
+) {
+  console.log("MAIL_PASS normalized by removing spaces for Gmail app password.");
 }
 
 if (senderEmail && senderPassword) {
