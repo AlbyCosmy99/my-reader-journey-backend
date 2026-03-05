@@ -24,6 +24,22 @@ const userSchema = new mongoose.Schema({
     password: {
         type:String,
         required: true
+    },
+    passwordResetCodeHash: {
+        type: String,
+        default: null
+    },
+    passwordResetExpiresAt: {
+        type: Date,
+        default: null
+    },
+    passwordResetSessionHash: {
+        type: String,
+        default: null
+    },
+    passwordResetSessionExpiresAt: {
+        type: Date,
+        default: null
     }
 })
 
