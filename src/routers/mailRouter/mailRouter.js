@@ -16,10 +16,36 @@ mailRouter.use(cors());
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
+  pool: true,
+  maxConnections: 1,
+  maxMessages: 50,
   auth: {
     user: senderEmail,
     pass: senderPassword,
   },
+});
+
+const buildVerificationEmail = (recipientEmail, verificationCode) => ({
+  from: senderEmail,
+  to: recipientEmail,
+  subject: "Your Verification Code",
+  text: `My Reader Journey\n\nYour verification code is: ${verificationCode}\n\nHappy reading!`,
+  html: `
+    <div style="padding: 2rem; text-align: center; font-family: Arial, sans-serif;">
+      <h1 style="color: #333;">Welcome to My Reader Journey!</h1>
+      <p style="font-size: 1.1rem; color: #555;">
+        We're excited to have you join our community of book lovers.
+      </p>
+      <p style="margin-top: 1.5rem; font-size: 1.2rem;">
+        📘 <strong>Your verification code:</strong>
+        <br />
+        <span style="font-size: 1.8rem; color: #007BFF;">${verificationCode}</span>
+      </p>
+      <p style="margin-top: 2rem; font-size: 1rem; color: #888;">
+        Happy reading!
+      </p>
+    </div>
+  `,
 });
 
 if (!senderEmail || !senderPassword) {
@@ -50,30 +76,18 @@ mailRouter.post("/send-verification", async (req, res) => {
       });
     }
 
-    await transporter.sendMail({
-      from: senderEmail,
-      to: normalizedEmail,
-      subject: "Your Verification Code",
-      text: `My Reader Journey\n\nYour verification code is: ${verificationCode}\n\nHappy reading!`,
-      html: `
-        <div style="padding: 2rem; text-align: center; font-family: Arial, sans-serif;">
-          <h1 style="color: #333;">Welcome to My Reader Journey!</h1>
-          <p style="font-size: 1.1rem; color: #555;">
-            We're excited to have you join our community of book lovers.
-          </p>
-          <p style="margin-top: 1.5rem; font-size: 1.2rem;">
-            📘 <strong>Your verification code:</strong>
-            <br />
-            <span style="font-size: 1.8rem; color: #007BFF;">${verificationCode}</span>
-          </p>
-          <p style="margin-top: 2rem; font-size: 1rem; color: #888;">
-            Happy reading!
-          </p>
-        </div>
-      `,
-    });
+    const mailOptions = buildVerificationEmail(
+      normalizedEmail,
+      verificationCode
+    );
 
+    // Return the verification code immediately; the SMTP round-trip can take
+    // several seconds in production and does not need to block the UI.
     res.send({ code: verificationCode });
+
+    void transporter.sendMail(mailOptions).catch((error) => {
+      console.error("Error sending email:", error);
+    });
   } catch (error) {
     console.error("Error sending email:", error);
     const details = error?.message || "Unknown error";
