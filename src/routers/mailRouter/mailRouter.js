@@ -2,7 +2,6 @@ import express from "express";
 import nodemailer from "nodemailer";
 import cors from "cors";
 import "dotenv/config";
-import { UserModel } from "../../database/schemas/userSchema.js";
 
 const senderEmail = process.env.MAIL_USER || process.env.MAIL;
 const senderPassword =
@@ -44,11 +43,6 @@ mailRouter.post("/send-verification", async (req, res) => {
   }
 
   try {
-    const existingUser = await UserModel.findOne({ email: normalizedEmail }).select("_id");
-    if (!existingUser) {
-      return res.status(404).send({ error: "User not found." });
-    }
-
     if (!senderEmail || !senderPassword) {
       return res.status(500).send({
         error:
